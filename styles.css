@@ -1,0 +1,25 @@
+body{
+  font-family: Arial, sans-serif;
+}
+
+.game-title{
+  font-size: 5rem;
+  text-align: center;
+}
+
+.game-container {
+  display: grid;
+  grid-template: repeat(3, 150px) / repeat(3, 150px);
+  justify-content: center;
+  align-content: center;
+}
+
+.squares{
+  border: 0.5px solid;
+  height: 150px;
+  width: 150px;
+  text-align: center;
+  font-size: 9rem;
+  user-select: none;
+  background: azure;
+}
