@@ -1,10 +1,12 @@
 body{
   font-family: Arial, sans-serif;
+  background: #fdf0d5;
 }
 
 .game-title{
   font-size: 5rem;
   text-align: center;
+  color: #c1121f;
 }
 
 .game-container {
@@ -13,6 +15,7 @@ body{
   justify-content: center;
   align-content: center;
   padding: 3rem;
+  gap: 5px;
 }
 
 .squares{
@@ -20,11 +23,52 @@ body{
   height: 150px;
   width: 150px;
   text-align: center;
-  font-size: 9rem;
   user-select: none;
+  font-size: 9rem;
   background: azure;
+  border: 2.5px solid #003049;
 }
 
 .player-info-container{
   padding: 1rem;
+  display: grid;
+  grid-template: 50px 1fr 100px / 1fr 1fr;
+  background: #669bbc;
+  border: 10px solid #003049;
+  color: white;
+  border-radius: 10px;
+}
+
+.player-info-container input, label{
+  height: 50px;
+  width: 150px;
+  border-radius: 10px;
+  font-size: 2rem;
+}
+
+.player-info{
+  height: 150px;
+  display: grid;
+  grid-template: 1fr / 1fr 1fr;
+}
+
+.player-info div {
+  align-self: center;
+  justify-self: center;
+  font-size: 5rem;
+  font-weight: bold;
+}
+
+.player-info-container button {
+  font-size: 4rem;
+}
+
+.animateMove{
+  animation-name: markSquare;
+  animation-duration: 1s;
+}
+
+@keyframes markSquare {
+  0% {font-size: 1.5rem; background: azure;}
+  100%{font-size: 9rem; background: royalblue;}
 }

@@ -1,17 +1,24 @@
 
 //factory for creation of player objects
-const Player = (name, playerId) => {
+const Player = (name) => {
+  let playerScore = 0;
   const getName = () => name;
-  const getPlayerId = () => playerId;
+  const setScore = (score) => playerScore = score;
+  const getScore = () => playerScore;
 
-return { getName, getPlayerId};
+return { getName, setScore, getScore};
 };
-
 
 //module pattern for game logic
 const gameMain = (() => {
   const allSquares = document.querySelectorAll(".squares");
   const gameTitle = document.querySelector(".game-title");
+  const player1ScoreArea = document.querySelector("#player1Score");
+  const player2ScoreArea = document.querySelector("#player2Score");
+  const nextRoundBtn = document.querySelector("#nextRound");
+
+  let player1;
+  let player2;
 
   let turn = 1;
 
@@ -19,16 +26,28 @@ const gameMain = (() => {
 
   const initializeGame = () => {
     gameBoard = ["", "", "", "", "", "", "", "", ""];
-    allSquares.forEach(square => square.addEventListener("click", playerMove));
+    allSquares.forEach(square => {
+      gameTitle.innerHTML = "GO!";
+      square.classList.remove("animateMove");
+      square.addEventListener("click", playerMove);
+    });
+    updateBoard();
+    turn = 1;
   }
 
-  const selectGame = () => {
-    const player1 = Player("long mann", "X");
-    const player2 = Player("player2", "O");
+  const newGame = () => {
+      let player1Name = document.querySelector("#player1").value;
+      let player2Name = document.querySelector("#player2").value;
+      player1 = Player(player1Name);
+      player2 = Player(player2Name);
+      initializeGame();
+      nextRoundBtn.addEventListener("click", initializeGame);
   }
 
   const displayController = () => {
     allSquares.forEach(square => square.innerHTML = gameBoard[square.id]);
+    player1ScoreArea.innerHTML = `${player1.getScore()}`
+    player2ScoreArea.innerHTML = `${player2.getScore()}`
   }
 
   const legalMove = (m) => {
@@ -40,9 +59,15 @@ const gameMain = (() => {
 
   const playerMove = (e) => {
     if(turn%2 === 1 ){
-      if(legalMove(e.target.id)) gameBoard[e.target.id] = "X";
-    }else{
-      if(legalMove(e.target.id)) gameBoard[e.target.id] = "O";
+      if(legalMove(e.target.id)){
+        e.srcElement.classList.add("animateMove");
+        gameBoard[e.target.id] = "X";
+      }
+    }else{      
+      if(legalMove(e.target.id)){
+        e.srcElement.classList.add("animateMove");
+        gameBoard[e.target.id] = "O"
+      }
     }
     updateBoard();
     checkWinner();
@@ -65,10 +90,12 @@ const gameMain = (() => {
 
      if(crossWins) {
        allSquares.forEach(square => square.removeEventListener("click", playerMove));
-       gameTitle.innerHTML = "X Won this game!";
+       player1.setScore(player1.getScore() + 1);
+       gameTitle.innerHTML = `${player1.getName()} Won this game!`;
      }else if(circleWins) {
        allSquares.forEach(square => square.removeEventListener("click", playerMove));
-       gameTitle.innerHTML = "O Won this game!";
+       player2.setScore(player2.getScore() + 1);
+       gameTitle.innerHTML = `${player2.getName()} Won this game!`;
      }else if(turn > 9) {
        allSquares.forEach(square => square.removeEventListener("click", playerMove));
        gameTitle.innerHTML = "This game is a Draw!";
@@ -80,8 +107,10 @@ const gameMain = (() => {
   }
 
   return {
-    initializeGame,
+    newGame,
   };
 })();
 
-gameMain.initializeGame();
+const startGameButton = document.querySelector(".start-game-btn");
+
+startGameButton.addEventListener("click", gameMain.newGame);
