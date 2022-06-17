@@ -62,18 +62,14 @@ const gameMain = (() => {
 
      const crossWins = winPatternArr.find(pattern => (pattern.join("") === "XXX"));
      const circleWins = winPatternArr.find(pattern => (pattern.join("") === "OOO"));
-      
+
      if(crossWins) {
        allSquares.forEach(square => square.removeEventListener("click", playerMove));
        gameTitle.innerHTML = "X Won this game!";
-     }
-
-     if(circleWins) {
+     }else if(circleWins) {
        allSquares.forEach(square => square.removeEventListener("click", playerMove));
        gameTitle.innerHTML = "O Won this game!";
-     }
-
-     if(turn > 9) {
+     }else if(turn > 9) {
        allSquares.forEach(square => square.removeEventListener("click", playerMove));
        gameTitle.innerHTML = "This game is a Draw!";
      }
