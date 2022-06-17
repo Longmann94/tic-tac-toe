@@ -1,59 +1,91 @@
+
+//factory for creation of player objects
+const Player = (name, playerId) => {
+  const getName = () => name;
+  const getPlayerId = () => playerId;
+
+return { getName, getPlayerId};
+};
+
+
 //module pattern for game logic
 const gameMain = (() => {
   const allSquares = document.querySelectorAll(".squares");
-  let turn = 0;
-  let gameBoard = ["X", "O", "X",
-                     "O", "X", "O",
-                     "X", "O", "X"];
+  const gameTitle = document.querySelector(".game-title");
+
+  let turn = 1;
+
+  let gameBoard = ["", "", "", "", "", "", "", "", ""];
 
   const initializeGame = () => {
     gameBoard = ["", "", "", "", "", "", "", "", ""];
     allSquares.forEach(square => square.addEventListener("click", playerMove));
   }
 
-  const displayController = (gameBoard) => {
-    console.log(`update game board ${gameBoard}`);
+  const selectGame = () => {
+    const player1 = Player("long mann", "X");
+    const player2 = Player("player2", "O");
+  }
+
+  const displayController = () => {
     allSquares.forEach(square => square.innerHTML = gameBoard[square.id]);
   }
 
-  const playerMove = (e) => {
-    if(turn === 0 || turn%2 === 0 ){
-      gameBoard[e.target.id] = "X";
-      console.log("player 1 turn");
-      updateBoard();
+  const legalMove = (m) => {
+    if(gameBoard[m] === ""){
       turn++
-    }else{
-      gameBoard[e.target.id] = "O";
-      console.log("player 2 turn");
-      updateBoard();
-      turn++
+      return true
     }
+  }
+
+  const playerMove = (e) => {
+    if(turn%2 === 1 ){
+      if(legalMove(e.target.id)) gameBoard[e.target.id] = "X";
+    }else{
+      if(legalMove(e.target.id)) gameBoard[e.target.id] = "O";
+    }
+    updateBoard();
+    checkWinner();
     }
 
-  const checkWinner = (gameBoard) => console.log("checking for winner");
+  const checkWinner = () => {
+    const winPatternArr = [
+                           [gameBoard[0], gameBoard[1], gameBoard[2]],
+                           [gameBoard[3], gameBoard[4], gameBoard[5]],
+                           [gameBoard[6], gameBoard[7], gameBoard[8]],
+                           [gameBoard[0], gameBoard[3], gameBoard[6]],
+                           [gameBoard[1], gameBoard[4], gameBoard[7]],
+                           [gameBoard[2], gameBoard[5], gameBoard[8]],
+                           [gameBoard[0], gameBoard[4], gameBoard[8]],
+                           [gameBoard[2], gameBoard[4], gameBoard[6]],
+                          ]
+
+     const crossWins = winPatternArr.find(pattern => (pattern.join("") === "XXX"));
+     const circleWins = winPatternArr.find(pattern => (pattern.join("") === "OOO"));
+      
+     if(crossWins) {
+       allSquares.forEach(square => square.removeEventListener("click", playerMove));
+       gameTitle.innerHTML = "X Won this game!";
+     }
+
+     if(circleWins) {
+       allSquares.forEach(square => square.removeEventListener("click", playerMove));
+       gameTitle.innerHTML = "O Won this game!";
+     }
+
+     if(turn > 9) {
+       allSquares.forEach(square => square.removeEventListener("click", playerMove));
+       gameTitle.innerHTML = "This game is a Draw!";
+     }
+  }
 
   const updateBoard = () => {
     displayController(gameBoard);
   }
 
   return {
-    initializeGame
+    initializeGame,
   };
 })();
 
 gameMain.initializeGame();
-
-
-
-//factory for creation of player objects
-const Player = (name, marker) => {
-  const getName = () => name;
-  const getMarker = () => console.log(name + " is playing using " + marker);
-
-return { getName, getMarker};
-};
-
-const long = Player("long mann", "X");
-const player2 = Player("player2", "O");
-long.getMarker();
-player2.getMarker();
