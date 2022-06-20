@@ -41,9 +41,13 @@ body{
 
 .player-info-container input, label{
   height: 50px;
-  width: 150px;
+  width: 250px;
   border-radius: 10px;
   font-size: 2rem;
+}
+
+.player-info-container input {
+  color: #c1121f;
 }
 
 .player-info{

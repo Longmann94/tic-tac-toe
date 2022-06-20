@@ -26,11 +26,11 @@ const gameMain = (() => {
 
   const initializeGame = () => {
     gameBoard = ["", "", "", "", "", "", "", "", ""];
-    allSquares.forEach(square => {
-      gameTitle.innerHTML = "GO!";
+    allSquares.forEach(square => {      
       square.classList.remove("animateMove");
       square.addEventListener("click", playerMove);
     });
+    gameTitle.innerHTML = "GO!";
     updateBoard();
     turn = 1;
   }
@@ -63,7 +63,7 @@ const gameMain = (() => {
         e.srcElement.classList.add("animateMove");
         gameBoard[e.target.id] = "X";
       }
-    }else{      
+    }else{
       if(legalMove(e.target.id)){
         e.srcElement.classList.add("animateMove");
         gameBoard[e.target.id] = "O"
